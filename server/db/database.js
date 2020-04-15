@@ -13,8 +13,8 @@
 // const Chocobo = require("./ChocoboModel");
 
 // //Establish associations
-// Chocobo.belongsTo(Moogle);
-// Moogle.hasMany(Chocobo);
+// // Chocobo.belongsTo(Moogle);
+// // Moogle.hasMany(Chocobo);
 
 // module.exports = {
 //   db,
