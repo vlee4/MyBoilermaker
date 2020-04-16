@@ -1,7 +1,19 @@
-// import React from 'react';
-// import {connect} from 'react-redux'
+import React from "react";
+import { connect } from "react-redux";
 // //also import any thunks you may be using here from the reducer(s)
 
+export class dummyComponent extends React.Component {
+  render() {
+    return (
+      <form>
+        <label htmlFor="name">Name </label>
+        <input name="name" type="text" placeholder="Type in a name"></input>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+export default connect()(dummyComponent);
 // class SomeComponent extends React.Component {
 
 //   render(){
