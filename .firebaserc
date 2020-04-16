@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "projectv-041620"
+  },
+  "targets": {
+    "projectv-041620": {
+      "hosting": {
+        "dev": [
+          "projectv-041620-dev"
+        ],
+        "production": [
+          "projectv-041620"
+        ]
+      }
+    }
   }
 }

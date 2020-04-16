@@ -8,7 +8,9 @@ import store from "./store";
 
 ReactDom.render(
   <Provider store={store}>
+    <h2>This is a header!</h2>
     <div>Hello, the World is expanding everyday!</div>
+    <p>One day there was a moogle that...</p>
   </Provider>,
   document.getElementById("app")
   //renders the rest of the app
