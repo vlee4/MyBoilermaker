@@ -4,7 +4,6 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const port = process.env.PORT || 1337;
 
 //Logging middleware: helps with debugging
 app.use(morgan("dev"));
@@ -39,12 +38,6 @@ app.use((err, req, res, next) => {
 
 //Listen for requests to the server
 //app.listen may be wrapped  in db.sync() if you're syncing a database
-app.listen(port, () => {
-  console.log(`Listening on port ${port}
-  http://localhost:1337/
-
-  `);
-});
 
 // export for use when you need to sync the db
 module.exports = app;
