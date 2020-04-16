@@ -17,33 +17,4 @@ db.authenticate()
     console.error("Unable to connect to the database:", err);
   });
 
-// // Models
-// // console.log("database", db);
-// const Moogle = db.define("moogle", {
-//   name: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//   },
-// });
-
-// const Chocobo = db.define("chocobo", {
-//   name: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//   },
-// });
-//Bring together your Sequelize instance (db) with your models
-// const Moogle = require("./MoogleModel");
-// const Chocobo = require("./ChocoboModel");
-
-// //Establish associations
-// Chocobo.belongsTo(Moogle);
-// Moogle.hasMany(Chocobo);
-// console.log("HERE's MY DB", db);
-
 module.exports = db;
-// module.exports = {
-//   db,
-//   Chocobo,
-//   Moogle,
-// };
