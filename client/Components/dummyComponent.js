@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 export class dummyComponent extends React.Component {
   render() {
     return (
-      <form>
-        <label htmlFor="name">Name </label>
-        <input name="name" type="text" placeholder="Type in a name"></input>
-        <button type="submit">Submit</button>
-      </form>
+      <div className="dummyComponent">
+        <form>
+          <label htmlFor="name">Name </label>
+          <input name="name" type="text" placeholder="Type in a name"></input>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
     );
   }
 }

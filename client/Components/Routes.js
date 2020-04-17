@@ -10,12 +10,11 @@ import dummyComponent from "./dummyComponent";
 const Routes = () => {
   return (
     <Router>
-      <div>
-        <nav>
-          <NavLink to="/">Home||</NavLink>
-          <NavLink to="/dummyComponent">dummyComponent</NavLink>
-        </nav>
-      </div>
+      <nav id="navBar">
+        <NavLink to="/">Home||</NavLink>
+        <NavLink to="/dummyComponent">Component</NavLink>
+      </nav>
+
       <Switch>
         <Route exact path="/dummyComponent" component={dummyComponent} />
         <Route
@@ -24,9 +23,12 @@ const Routes = () => {
           render={() => {
             return (
               <div id="mainpage">
-                <h2>This is a header!</h2>
-                <div>Hello, the World is expanding everyday!</div>
-                <p>One day there was a moogle that...</p>
+                <img id="Moogle" src="Moogle-v1.png" />
+                <div className="mainContent">
+                  <h2>KUPO!</h2>
+                  <div>Hello ku, the World is expanding everyday kupo!</div>
+                  <p>But in the meantime, this site is construction kupo!...</p>
+                </div>
               </div>
             );
           }}
