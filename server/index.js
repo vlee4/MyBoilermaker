@@ -25,7 +25,7 @@ app.use("/api", require("./api"));
 
 //for any requests that don't match our API routes, the index.html will be sent
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../index.html"));
+  res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 //Error handling
