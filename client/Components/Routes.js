@@ -6,16 +6,19 @@ import {
   Switch,
 } from "react-router-dom";
 import dummyComponent from "./dummyComponent";
+import animeComponent from "./animeComponent";
 
 const Routes = () => {
   return (
     <Router>
       <nav id="navBar">
-        <NavLink to="/">Home||</NavLink>
-        <NavLink to="/dummyComponent">Component</NavLink>
+        <NavLink to="/">Home|| </NavLink>
+        <NavLink to="/dummyComponent">Component|| </NavLink>
+        <NavLink to="/animeComponent">Animation</NavLink>
       </nav>
 
       <Switch>
+        <Route exact path="/animeComponent" component={animeComponent} />
         <Route exact path="/dummyComponent" component={dummyComponent} />
         <Route
           exact
