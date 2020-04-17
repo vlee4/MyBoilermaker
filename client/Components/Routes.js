@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import dummyComponent from "./dummyComponent";
 import animeComponent from "./animeComponent";
+import Moving from "./Moving";
 
 const Routes = () => {
   return (
@@ -14,10 +15,12 @@ const Routes = () => {
       <nav id="navBar">
         <NavLink to="/">Home|| </NavLink>
         <NavLink to="/dummyComponent">Component|| </NavLink>
-        <NavLink to="/animeComponent">Animation</NavLink>
+        <NavLink to="/animeComponent">Animation|| </NavLink>
+        <NavLink to="/Moving">Moving</NavLink>
       </nav>
 
       <Switch>
+        <Route exact path="/Moving" component={Moving} />
         <Route exact path="/animeComponent" component={animeComponent} />
         <Route exact path="/dummyComponent" component={dummyComponent} />
         <Route

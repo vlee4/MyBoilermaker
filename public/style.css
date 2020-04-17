@@ -67,3 +67,24 @@ body {
   display: inline-block;
   line-height: 1em;
 }
+
+/* ////////////// */
+
+.Moving {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 100vw;
+  height: 100vh;
+  /* cursor: url("Moogle-v1.png"), default; */
+}
+
+.Mog {
+  max-width: 200px;
+  max-height: 160px;
+}
+
+#moogleLand {
+  justify-self: center;
+  align-self: center;
+}
