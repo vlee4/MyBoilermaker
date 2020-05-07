@@ -8,6 +8,7 @@ import {
 import dummyComponent from "./dummyComponent";
 import animeComponent from "./animeComponent";
 import Moving from "./Moving";
+import Canvas from "./Canvas";
 
 const Routes = () => {
   return (
@@ -16,10 +17,12 @@ const Routes = () => {
         <NavLink to="/">Home|| </NavLink>
         <NavLink to="/dummyComponent">Component|| </NavLink>
         <NavLink to="/animeComponent">Animation|| </NavLink>
-        <NavLink to="/Moving">Moving</NavLink>
+        <NavLink to="/Moving">Moving|| </NavLink>
+        <NavLink to="/Canvas">Canvas</NavLink>
       </nav>
 
       <Switch>
+        <Route exact path="/Canvas" component={Canvas} />
         <Route exact path="/Moving" component={Moving} />
         <Route exact path="/animeComponent" component={animeComponent} />
         <Route exact path="/dummyComponent" component={dummyComponent} />
