@@ -1,17 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import Konva from "konva";
-import { render } from "react-dom";
+// import { render } from "react-dom";
 import { Stage, Layer, Image, Text } from "react-konva";
 import { connect } from "react-redux";
+// import bodyPix from "@tensorflow-models";
+// import * as bodyPix from "@tensorflow-models/body-pix";
+const bodyPix = require("@tensorflow-models/body-pix");
+import regeneratorRuntime from "regenerator-runtime";
 
 class Canvas extends React.Component {
   constructor() {
     super();
     this.startCam = this.startCam.bind(this);
     this.stopCam = this.stopCam.bind(this);
+    this.segmentAndMask = this.segmentAndMask.bind(this);
+    this.loadAndPredict = this.loadAndPredict.bind(this);
   }
-
-  componentDidMount() {}
 
   startCam() {
     var video = document.querySelector("#videoElement");
@@ -41,16 +45,70 @@ class Canvas extends React.Component {
     video.srcObject = null;
   }
 
+  async loadAndPredict() {
+    console.log("LOAD AND PREDICT");
+    var video = document.querySelector("#videoElement");
+    try {
+      const net = await bodyPix.load({
+        architecture: "MobileNetV1",
+        outputStride: 16,
+        multiplier: 0.75,
+        quantBytes: 2,
+      }); // using default MobileNetV1 arch
+      console.log("LOADED PIX");
+      const segmentation = await net.segmentPerson(video, {
+        flipHorizontal: false,
+        internalResolution: "medium",
+        segmentationThreshold: 0.7,
+      });
+      console.log("Here's the segmenation", segmentation);
+      return segmentation;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async segmentAndMask() {
+    console.log("SEGMENT");
+    var video = document.querySelector("#videoElement");
+    var videoPromise = await new Promise((resolve) => {
+      video.onloadedmetadata = () => {
+        video.width = video.videoWidth;
+        video.height = video.videoHeight;
+        resolve(video);
+      };
+    });
+    const segmentation = this.loadAndPredict();
+    const backgroundBlurAmount = 3;
+    const edgeBlurAmount = 3;
+    const flipHorizontal = false;
+
+    const canvas = document.getElementById("canvas");
+    bodyPix.drawBokehEffect(
+      canvas,
+      videoPromise,
+      segmentation,
+      backgroundBlurAmount,
+      edgeBlurAmount,
+      flipHorizontal
+    );
+  }
+
   render() {
     if (!navigator.mediaDevices.getUserMedia) {
       return <h2>Loading...</h2>;
     }
 
     return (
-      <div id="container">
-        <video autoPlay={true} id="videoElement"></video>
-        <button onClick={this.startCam}>START</button>
-        <button onClick={this.stopCam}>STOP</button>
+      <div>
+        <div id="container">
+          <video autoPlay={true} id="videoElement"></video>
+          <button onClick={this.startCam}>START</button>
+          <button onClick={this.stopCam}>STOP</button>
+          <button onClick={this.segmentAndMask}>SEGMENT</button>
+          <hr />
+          {/* <div id="canvas"></div> */}
+          <canvas id="canvas" width="500"></canvas>
+        </div>
       </div>
     );
   }
