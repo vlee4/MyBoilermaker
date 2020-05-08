@@ -288,12 +288,31 @@ import regeneratorRuntime from "regenerator-runtime";
 class Canvas extends React.Component {
   constructor() {
     super();
+    this.state = {
+      _isMounted: false,
+    };
     this.startCam = this.startCam.bind(this);
     this.stopCam = this.stopCam.bind(this);
     this.segmentAndMask = this.segmentAndMask.bind(this);
     // this.loadAndPredict = this.loadAndPredict.bind(this);
     this.draw = this.draw.bind(this);
+    this.continuouslySegmentAndMask = this.continuouslySegmentAndMask.bind(
+      this
+    );
   }
+
+  componentDidMount() {
+    this.setState({
+      _isMounted: true,
+    });
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      _isMounted: false,
+    });
+  }
+
   startCam() {
     var video = document.querySelector("video");
     if (navigator.mediaDevices.getUserMedia) {
@@ -386,8 +405,23 @@ class Canvas extends React.Component {
       edgeBlurAmount,
       flipHorizontal
     );
+    this.continuouslySegmentAndMask();
     // this.renderImageToCanvas(video, size, canvas);
   }
+  continuouslySegmentAndMask() {
+    //continuously renders next frame of video
+    var video = document.querySelector("video");
+    if (video.srcObject && this.state._isMounted) {
+      requestAnimationFrame(() => {
+        console.log("this", this);
+        this.segmentAndMask();
+        // continouslySegmentAndMask();
+      });
+    }
+    //if cam is running then continue this function if not, then stop this function
+    //check if component is mounted first before running this fn
+  }
+
   draw() {
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
