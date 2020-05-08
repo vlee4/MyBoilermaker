@@ -354,58 +354,143 @@ class Canvas extends React.Component {
   //     console.log(error);
   //   }
   // }
+
+  // async segmentAndMask() {
+  //   console.log("SEGMENT");
+  //   var video = document.getElementById("video");
+
+  //   const net = await bodyPix.load({
+  //     architecture: "MobileNetV1",
+  //     outputStride: 16,
+  //     multiplier: 0.5,
+  //     quantBytes: 2,
+  //   });
+  //   const segmentation = await net.segmentPerson(video, {
+  //     flipHorizontal: false,
+  //     internalResolution: "medium",
+  //     segmentationThreshold: 0.7,
+  //   });
+  //   console.log("after promise");
+  //   // const segmentation = this.loadAndPredict();
+  //   const maskBackground = true;
+  //   const foregroundColor = { r: 0, g: 0, b: 0, a: 0 };
+  //   const backgroundColor = { r: 255, g: 255, b: 255, a: 255 };
+  //   const backgroundDarkeningMask = bodyPix.toMask(
+  //     segmentation,
+  //     foregroundColor,
+  //     backgroundColor
+  //   );
+  //   const opacity = 1.0;
+  //   const maskBlurAmount = 3;
+  //   const backgroundBlurAmount = 20;
+  //   const edgeBlurAmount = 3;
+  //   const flipHorizontal = false;
+  //   const canvas = document.getElementById("canvas");
+  //   console.log("canvas", canvas);
+  //   const coloredPartImage = bodyPix.toMask(segmentation);
+
+  //   // const backgroundBlurAmount = 3;
+  //   // const edgeBlurAmount = 3;
+  //   // const flipHorizontal = false;
+  //   //////////////
+  //   // bodyPix.drawMask(
+  //   //   canvas,
+  //   //   video,
+  //   //   backgroundDarkeningMask,
+  //   //   opacity,
+  //   //   maskBlurAmount,
+  //   //   flipHorizontal
+  //   // );
+
+  //   //////////
+
+  //   // var context = canvas.getContext("2d");
+  //   // context.globalCompositeOperation = "destination-over";
+  //   // bodyPix.drawBokehEffect(
+  //   //   canvas,
+  //   //   video,
+  //   //   segmentation,
+  //   //   backgroundBlurAmount,
+  //   //   edgeBlurAmount,
+  //   //   flipHorizontal
+  //   // );
+  //   this.continuouslySegmentAndMask();
+  //   // this.renderImageToCanvas(video, size, canvas);
+  // }
+
   async segmentAndMask() {
-    console.log("SEGMENT");
-    var video = document.getElementById("video");
-    // var videoPromise = new Promise(resolve => {
-    //   console.log("in promise");
-    //   video.onloadedmetadata = () => {
-    //     video.width = video.videoWidth;
-    //     video.height = video.videoHeight;
-    //     resolve(video);
-    //   };
-    // });
-    const net = await bodyPix.load({
-      architecture: "MobileNetV1",
+    let video, c_out, ctx_out, c_tmp, ctx_tmp, model;
+    const bodyPixConfig = {
+      architechture: "MobileNetV1",
       outputStride: 16,
       multiplier: 1,
-      quantBytes: 2,
+      quantBytes: 4,
+    };
+    const segmentationConfig = {
+      internalResolution: "high",
+      segmentationThreshold: 0.05,
+      scoreThreshold: 0.05,
+    };
+    function init() {
+      video = document.getElementById("video");
+      //set ouput canvas
+      c_out = document.getElementById("output-canvas");
+      ctx_out = c_out.getContext("2d"); //get context of output canvas
+      //Create canvas
+      c_tmp = document.createElement("canvas");
+      c_tmp.setAttribute("width", video.videoWidth);
+      c_tmp.setAttribute("height", video.videoHeight);
+      ctx_tmp = c_tmp.getContext("2d"); //get context of canvas
+      video.play();
+      computeFrame();
+    }
+    function computeFrame() {
+      //drawImage(image, dx, dy, dWidth, dHeight, )
+      //image: element to draw into the canvas context
+      //dx: x coordinate where to place top left corner of source image in the destination canvas
+      //dWidth: width to draw the image in the destination canvas: allowing for scaling; default: won't scale image
+      ctx_tmp.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      let frame = ctx_tmp.getImageData(
+        0,
+        0,
+        video.videoWidth,
+        video.videoHeight
+      );
+      //same as when we do net.segmentPerson
+      model.segmentPerson(c_tmp, segmentationConfig).then((segmentation) => {
+        ctx_out.clearRect(0, 0, c_out.width, c_out.height);
+        let out_image = ctx_out.getImageData(
+          0,
+          0,
+          video.videoWidth,
+          video.videoHeight
+        );
+        //ctx.getImageData(sx, sy, sw, sh)
+        //sx: x-coordinate of from top-left corner from which ImageData will be extracted
+        //sw: width or rectangle from which Image Data will be extrated
+        for (let x = 0; x < video.videoWidth; x++) {
+          for (let y = 0; y < video.videoHeight; y++) {
+            let n = x + y * video.videoWidth;
+            if (segmentation.data[n] == 1) {
+              out_image.data[n * 4] = frame.data[n * 4]; //R
+              out_image.data[n * 4 + 1] = frame.data[n * 4 + 1]; //G
+              out_image.data[n * 4 + 2] = frame.data[n * 4 + 2]; //B
+              out_image.data[n * 4 + 3] = frame.data[n * 4 + 3]; //A
+            }
+          }
+        }
+        ctx_out.putImageData(out_image, 0, 0);
+        setTimeout(computeFrame, 0);
+      });
+    }
+    // document.addEventListener("DOMContentLoaded", () => {
+    bodyPix.load(bodyPixConfig).then((m) => {
+      //load will return
+      model = m;
+      init();
     });
-    const segmentation = await net.segmentPerson(video, {
-      flipHorizontal: false,
-      internalResolution: "medium",
-      segmentationThreshold: 0.7,
-    });
-    console.log("after promise");
-    // const segmentation = this.loadAndPredict();
-    const maskBackground = true;
-    const foregroundColor = { r: 0, g: 0, b: 0, a: 0 };
-    const backgroundColor = { r: 0, g: 0, b: 0, a: 255 };
-    const backgroundDarkeningMask = bodyPix.toMask(
-      segmentation,
-      foregroundColor,
-      backgroundColor
-    );
-    const opacity = 0.1;
-    const maskBlurAmount = 3;
-    const backgroundBlurAmount = 20;
-    const edgeBlurAmount = 3;
-    const flipHorizontal = true;
-    const canvas = document.getElementById("canvas");
-    console.log("canvas", canvas);
-    const coloredPartImage = bodyPix.toMask(segmentation);
-    // const backgroundBlurAmount = 3;
-    // const edgeBlurAmount = 3;
-    // const flipHorizontal = false;
-    bodyPix.drawBokehEffect(
-      canvas,
-      video,
-      segmentation,
-      backgroundBlurAmount,
-      edgeBlurAmount,
-      flipHorizontal
-    );
-    this.continuouslySegmentAndMask();
+    // });
+    // this.continuouslySegmentAndMask();
     // this.renderImageToCanvas(video, size, canvas);
   }
   continuouslySegmentAndMask() {
@@ -433,14 +518,15 @@ class Canvas extends React.Component {
     }
     return (
       <div>
-        <div id="container" height="500" width="500">
-          <video autoPlay={true} id="video" height="500" width="500"></video>
+        <div id="container" height="375" width="500">
+          <video autoPlay={true} id="video" height="375" width="500"></video>
           <button onClick={this.startCam}>START</button>
           <button onClick={this.stopCam}>STOP</button>
           <button onClick={this.segmentAndMask}>SEGMENT</button>
           <hr />
           {/* <div id="canvas"></div> */}
-          <canvas id="canvas"></canvas>
+          {/* OUTPUT CANVAS */}
+          <canvas id="output-canvas" height="375" width="500"></canvas>
         </div>
       </div>
     );

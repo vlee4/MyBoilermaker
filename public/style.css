@@ -95,18 +95,19 @@ body {
   margin: 0px auto;
   width: 500px;
   height: 375px;
-  border: 10px #333 solid;
+  /* border: 10px #333 solid; */
 }
 
-#videoElement {
-  width: 500px;
-  height: 375px;
+#video {
+  max-width: 500;
+  max-height: 375;
   background-color: #666;
 }
 
-#canvas {
+#output-canvas {
   margin: 0px auto;
-  width: 500px;
-  height: 375px;
-  border: 10px rgb(219, 60, 60) solid;
+  width: 500;
+  height: 375;
+  background-color: transparent;
+  /* border: 10px rgb(219, 60, 60) solid; */
 }
