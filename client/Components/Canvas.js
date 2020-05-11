@@ -1,8 +1,9 @@
 import React from "react";
-import Konva from "konva";
-import { Stage, Layer, Image, Text } from "react-konva";
+// import Konva from "konva";
+// import { Stage, Layer, Image, Text } from "react-konva";
 import { connect } from "react-redux";
 const bodyPix = require("@tensorflow-models/body-pix");
+import regeneratorRuntime from "regenerator-runtime";
 
 class Canvas extends React.Component {
   constructor() {
@@ -13,7 +14,6 @@ class Canvas extends React.Component {
     this.startCam = this.startCam.bind(this);
     this.stopCam = this.stopCam.bind(this);
     this.segmentAndMask = this.segmentAndMask.bind(this);
-    this.draw = this.draw.bind(this);
     this.continuouslySegmentAndMask = this.continuouslySegmentAndMask.bind(
       this
     );
@@ -145,7 +145,6 @@ class Canvas extends React.Component {
       requestAnimationFrame(() => {
         console.log("this", this);
         this.segmentAndMask();
-        // continouslySegmentAndMask();
       });
     }
     //if cam is running then continue this function if not, then stop this function
