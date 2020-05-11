@@ -72,6 +72,8 @@ class Canvas extends React.Component {
       video = document.getElementById("video");
       //set ouput canvas
       c_out = document.getElementById("output-canvas");
+      c_out.setAttribute("width", video.videoWidth);
+      c_out.setAttribute("height", video.videoHeight);
       ctx_out = c_out.getContext("2d"); //get context of output canvas
       //Create canvas
       c_tmp = document.createElement("canvas");
@@ -157,14 +159,16 @@ class Canvas extends React.Component {
     }
     return (
       <div>
-        <div id="container" height="375" width="500">
-          <video autoPlay={true} id="video" height="375" width="500"></video>
-          <button onClick={this.startCam}>START</button>
-          <button onClick={this.stopCam}>STOP</button>
-          <button onClick={this.segmentAndMask}>SEGMENT</button>
+        <div id="container">
+          <video autoPlay={true} id="video"></video>
+          <div className="buttons">
+            <button onClick={this.startCam}>START</button>
+            <button onClick={this.stopCam}>STOP</button>
+            <button onClick={this.segmentAndMask}>SEGMENT</button>
+          </div>
           <hr />
           {/* OUTPUT CANVAS */}
-          <canvas id="output-canvas" height="375" width="500"></canvas>
+          <canvas id="output-canvas"></canvas>
         </div>
       </div>
     );

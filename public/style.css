@@ -92,22 +92,33 @@ body {
 /* Canvas */
 
 #container {
+  display: flex;
+  flex-direction: column;
   margin: 0px auto;
-  width: 500px;
-  height: 375px;
+  width: 100vw;
+  height: 100vh;
   /* border: 10px #333 solid; */
+}
+.buttons {
+  display: flex;
+  justify-content: center;
 }
 
 #video {
+  display: flex;
+  flex-grow: 1;
+  align-self: center;
   max-width: 500;
   max-height: 375;
   background-color: #666;
 }
 
 #output-canvas {
+  /* display: flex; */
+  flex-grow: 1;
   margin: 0px auto;
-  width: 500;
-  height: 375;
+  max-width: 500;
+  max-height: 375;
   background-color: transparent;
   /* border: 10px rgb(219, 60, 60) solid; */
 }
