@@ -106,7 +106,7 @@ body {
 
 #video {
   display: flex;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   align-self: center;
   max-width: 500;
   max-height: 375;
@@ -115,7 +115,7 @@ body {
 
 #output-canvas {
   /* display: flex; */
-  flex-grow: 1;
+  /* flex-grow: 1; */
   margin: 0px auto;
   max-width: 500;
   max-height: 375;
