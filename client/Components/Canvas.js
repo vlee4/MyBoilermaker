@@ -72,6 +72,7 @@ class Canvas extends React.Component {
       video = document.getElementById("video");
       //set ouput canvas
       c_out = document.getElementById("output-canvas");
+      //Note: may need to change this when we start moving videos, unless you can draw canvases on other canvases, or maybe Konva layers...
       c_out.setAttribute("width", video.videoWidth);
       c_out.setAttribute("height", video.videoHeight);
       ctx_out = c_out.getContext("2d"); //get context of output canvas
